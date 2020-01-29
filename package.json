@@ -1,0 +1,33 @@
+{
+  "name": "restish",
+  "version": "0.1.0",
+  "description": "A REST inspired data access layer",
+  "scripts": {
+    "build:client": "TARGET=client ./node_modules/.bin/babel lib/matchPath.js lib/restish-client.js --out-dir dist  --source-maps",
+    "build:server": "TARGET=server ./node_modules/.bin/babel lib/matchPath.js lib/koa-restish.js --out-dir distServer  --source-maps",
+    "build": "rm -rf ./dist* && NODE_ENV=production npm run build:client && NODE_ENV=production npm run build:server",
+    "build-dev": "rm -rf ./dist && ./node_modules/.bin/babel lib --out-dir dist --source-maps --watch",
+    "test": "NODE_ENV=test node_modules/mocha/bin/mocha --require @babel/register --exit ./__test__/test-*.js"
+  },
+  "author": "Sebastian Ware <sebastian@urbantalk.se> (https://github.com/jhsware)",
+  "license": "ISC",
+  "devDependencies": {
+    "axios": "^0.18.0",
+    "@babel/cli": "^7.1.2",
+    "@babel/core": "^7.1.2",
+    "@babel/polyfill": "^7.0.0",
+    "@babel/preset-env": "^7.1.0",
+    "@babel/register": "^7.0.0",
+    "chai": "^4.1.2",
+    "koa": "^2.6.1",
+    "koa-json-body": "^5.3.0",
+    "koa-logger": "^3.2.0",
+    "koa-router": "^7.4.0",
+    "koa-session": "^5.8.1",
+    "mocha": "^5.2.0",
+    "safe-utils": "^0.2.1"
+  },
+  "dependencies": {
+    "path-to-regexp-es6": "^1.7.0"
+  }
+}
