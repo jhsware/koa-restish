@@ -1,14 +1,14 @@
-# restish
+# koa-restish
 
-Think of `restish` as the natural evolution of REST APIs, with batch calls and endpoint level caching. This bridges some of the gap between GraphQL and REST but at 1/10th of the size.
+RESTish is the natural evolution of REST APIs, with the addition of batch calls and client-side endpoint level caching. This bridges some of the gap between GraphQL and REST but at 1/10th of the size.
 
-The library consists of a server-side library and an isomorphic client-side library.
+The library consists of a server-side and a client-side part. The client-side code is isomorphic, so it runs both in a browser and on Node.js.
 
-The server-side library defines your endpoints, using syntax that is very similar to ordinary express or koa routes.
+The server-side library defines your endpoints. The syntax is very similar to ordinary express or koa routes.
 
-The client-side library abstracts data fetching and handles endpoint caching. This allows the library to share API-state across multiple components in a single page application.
+The client-side library abstracts data fetching and handles endpoint caching. This allows the library to transparently share API-state across multiple components in a single page application.
 
-Because `restish` uses the mental model of a REST API, it is easy to learn and lowers the cost of migration by several orders of magnitude.
+Because RESTish uses the mental model of a REST API, it is easy to learn and lowers the cost of migration by several orders of magnitude.
 
 ## Server-side code example using KoaJS
 
