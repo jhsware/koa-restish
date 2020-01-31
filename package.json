@@ -7,6 +7,11 @@
     "email": "sebastian@urbantalk.se",
     "url": "https://github.com/jhsware"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jhsware/koa-restish.git"
+  },
+  
   "license": "MIT",
   "main": "dist/restish-client.js",
   "module": "lib/restish-client.js",
@@ -35,6 +40,8 @@
     "build:server": "TARGET=server ./node_modules/.bin/babel lib/matchPath.js lib/koa-restish.js --out-dir distServer  --source-maps",
     "build": "rm -rf ./dist* && NODE_ENV=production npm run build:client && NODE_ENV=production npm run build:server",
     "build-dev": "rm -rf ./dist && ./node_modules/.bin/babel lib --out-dir dist --source-maps --watch",
-    "test": "NODE_ENV=test node_modules/mocha/bin/mocha --require @babel/register --exit ./__test__/test-*.js"
+    "test": "NODE_ENV=test node_modules/mocha/bin/mocha --require @babel/register --exit ./__test__/test-*.js",
+    "prepublish": "NODE_ENV=development npm run build",
+    "postversion": "git push && git push --tags"
   }
 }
