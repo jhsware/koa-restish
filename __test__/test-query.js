@@ -1,6 +1,7 @@
 import "@babel/polyfill"
 import koaServer from './server'
 import Client from '../lib/restish-client'
+// import Client from 'koa-restish/lib/restish-client'
 import { expect } from 'chai'
 
 const PORT = 3901

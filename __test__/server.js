@@ -3,6 +3,7 @@ import logger from 'koa-logger'
 import session from 'koa-session'
 import koaRouter from 'koa-router'
 import RestishRouter from '../lib/koa-restish'
+// import RestishRouter from 'koa-restish/lib/koa-restish'
 import koaJSONBody from 'koa-json-body'
 
 const app = new koa();
