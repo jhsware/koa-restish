@@ -1,6 +1,6 @@
 {
   "name": "koa-restish",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A REST inspired data access layer for single page apps",
   "author": {
     "name": "Sebastian Ware",
@@ -11,7 +11,6 @@
     "type": "git",
     "url": "git+https://github.com/jhsware/koa-restish.git"
   },
-  
   "license": "MIT",
   "main": "dist/restish-client.js",
   "module": "lib/restish-client.js",
