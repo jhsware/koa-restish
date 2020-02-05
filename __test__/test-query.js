@@ -130,9 +130,10 @@ describe("restish-client query", () => {
     it("invalidated by single endpoint", async function () {
       const backend = new Client({ API_URI: SERVER_ENDPOINT })
 
-      const { data: origData } = await backend.query({
+      const { data: tmpData } = await backend.query({
         URI: '/content/Cached/1'
       })
+      const origData = Object.assign({}, tmpData)
       
       await backend.delete({
         URI: '/content/Cached/1',
@@ -156,8 +157,10 @@ describe("restish-client query", () => {
         { URI: '/content/User/1' }
       ])
 
-      const origPost = origData[0]
-      const origUser = origData[1]
+      // Need to copy these so they don't get updated
+      // by the object cache
+      const origPost = Object.assign({}, origData[0])
+      const origUser = Object.assign({}, origData[1])
             
       await backend.delete({
         URI: '/content/SomeOne/1',
