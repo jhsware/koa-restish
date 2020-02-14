@@ -125,6 +125,11 @@ export {
 ## Client-side code examples
 
 ```js
+import { ApiClient } from 'koa-restish'
+
+const API_URI = 'http://localhost:3000/restish'
+const apiClient = new ApiClient({ API_URI })
+
 // Fetch current user
 const { data } = await apiClient.query({
   URI: '/session'
@@ -160,7 +165,7 @@ Passing cookies to RESTish API in Koajs.
 import axios from 'axios'
 import { ApiClient } from 'koa-restish'
 
-const API_URI = process.env.API_URI || 'http://127.0.0.1/restish'
+const API_URI = process.env.API_URI || 'http://127.0.0.1:3000/restish'
 
 app.use(async (ctx) => {
   const headers = {}
