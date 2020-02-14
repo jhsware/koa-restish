@@ -4,11 +4,13 @@ RESTish is the natural evolution of REST APIs, with the addition of batch calls 
 
 The library consists of a server-side and a client-side part. The client-side code is isomorphic, so it runs both in a browser and on Node.js.
 
-The server-side library defines your endpoints. The syntax is very similar to ordinary express or koa routes.
+One of the greatest points of confusion with REST was how to use the verbs GET, PUT, POST and DELETE (okay, the last one is probably the least ambiguous). In RESTish they are simply called create, query, update and delete.
 
-The client-side library abstracts data fetching and handles endpoint caching. This allows the library to transparently share API-state across multiple components in a single page application.
+The server-side library defines your endpoints. The syntax is very similar to ordinary express or koa routes. If you have exprience of REST you will feel right at home. This is where you integrate your API:s and data sources. You also implement your session handling at this level allowing your frontend application to access the RESTish API directly from the browser. Note: if you do server-side rendering, you need to pass you cookies to the RESTish API, see example.
 
-Because RESTish uses the mental model of a REST API, it is easy to learn and lowers the cost of migration by several orders of magnitude.
+The client-side library abstracts data fetching and handles endpoint caching. This allows the library to transparently share API-state across multiple components in a single page application. By sharing state through caching you don't have to worry about the performance penalty of repeating calls to the API. Once an endpoint has been cached the results will be returned immediately through a `Promise.resolve()`. This makes the code more readable with less dependency between components.
+
+Because RESTish uses the mental model of a REST API, it is easy to learn and lowers the cost of migration by several orders of magnitude. This lightweight approach is a perfect candidate to run on a serverless platform, integrating your micro-services.
 
 ## Server-side code example using KoaJS
 
@@ -21,7 +23,7 @@ import koaRouter from 'koa-router'
 import RestishRouter from 'koa-restish/lib/koa-restish'
 import koaJSONBody from 'koa-json-body'
 import { createSession, querySession, endSession, initUsers } from './types/session'
-const { createContent, queryContent, updateContent, deleteContent } = require('./types/content')
+import { createContent, queryContent, updateContent, deleteContent } from './types/content'
 
 const app = new koa();
 const router = new koaRouter();
@@ -118,4 +120,38 @@ export {
   updateContent,
   deleteContent
 }
+```
+
+Passing cookies to RESTish API in Koajs.
+
+```js
+import axios from 'axios'
+import { ApiClient } from 'koa-restish'
+
+const API_URI = process.env.API_URI || 'http://127.0.0.1/restish'
+
+app.use(async (ctx) => {
+  const headers = {}
+  if (ctx.headers['cookie']) {
+    headers['Cookie'] = ctx.headers['cookie']
+  }
+
+  // A new axios instance needs to be instantiated for every call so
+  // we don't leak the cookie secret.
+  const axiosInstance = axios.create({
+    headers
+  });
+
+  const apiClient = new ApiClient({
+    API_URI,
+    // Passing an axios instance with the cookie set to get client session
+    axios: axiosInstance
+  })
+
+  /**
+   * Your server-side rendering code goes here...
+   * 
+   * const res = await apiClient.query(...)
+   * */
+})
 ```
