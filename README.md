@@ -122,6 +122,38 @@ export {
 }
 ```
 
+## Client-side code examples
+
+```js
+// Fetch current user
+const { data } = await apiClient.query({
+  URI: '/session'
+})
+
+// Fetch data from multiple endpoints in a single call
+const query = {
+  query: {
+    section: 'investor'
+  }
+}
+const { data } = await apiClient.query([
+  { URI: `/content/app/${appId}` }
+  { URI: '/content/page', query }
+])
+const app = data[0]
+const pages = data[1]
+
+// Create an object
+const { data } = await apiClient.create({
+  URI: '/content/page',
+  data: { ... },
+  // Invalidates all cached endpoints that start with /content/page
+  invalidate: ['/content/page']
+})
+```
+
+## Server-side rendering
+
 Passing cookies to RESTish API in Koajs.
 
 ```js
