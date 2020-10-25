@@ -1,4 +1,4 @@
-// import "@babel/polyfill"
+require("@babel/polyfill")
 const { expect } = require('chai')
 const { purgeWithShape } = require('../lib/purgeWithShape')
 
