@@ -192,3 +192,94 @@ app.use(async (ctx) => {
    * */
 })
 ```
+
+Developer notes:
+
+TODO: Implement shape
+```js
+shape = [
+  "discountCode",
+  "firstRow",
+  "order",
+  "order.orderDate",
+  "order.orderCurrency",
+  "order.orderRows[]",
+  "order.orderRows[].itemDescription",
+  "order.orderRows[].sku",
+  "order.orderRows[].qty",
+]
+
+// All primitive props on first lever except email (skipping objects and arrays)
+shape = [
+  "*",
+  "!email",
+]
+
+// All props at first and all primitive types on second level
+shape = [
+  "*.*",
+]
+
+// All props on first two levels and primitive types on third level
+shape = [
+  "*.*.*",
+]
+
+// All primitive props at first level and all primitive types under order
+shape = [
+  "*",
+  "order.*",
+]
+
+// All primitive props at first level and all props for order, excluding the array orderRows
+shape = [
+  "*",
+  "order.*.*",
+  "order.!orderRows[]",
+]
+
+// All primitive props at first level and all props for order, limiting results in array orderRows
+shape = [
+  "*",
+  "order.*.*",
+  "order.orderRows[0-9]",
+]
+
+// Create shape from provided schema (useful when getting data for forms etc.)
+createShapeFromSchema(schema)
+
+// Server-side filter of output is performed by Restish
+// Objects do a lookahead to next level to see if they should be included at all
+purgeWithShape(data, shape)
+[
+  ["*", "!email"],
+]
+[
+  ["*"],
+  ["*.*"],
+]
+[
+  ["*"],
+  ["*.*"],
+  ["*.*.*"],
+]
+[
+  ["*"],
+  ["order.*"],
+]
+[
+  ["*"],
+  ["order.*"],
+]
+[
+  ["*"],
+  ["order.*", "order.!orderRows[]"],
+  ["order.*.*"],
+]
+[
+  ["*"],
+  ["order.*", "order.orderRows[0-9]"],
+  ["order.*.*"],
+]
+
+```
