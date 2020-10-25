@@ -193,9 +193,19 @@ app.use(async (ctx) => {
 })
 ```
 
-Developer notes:
+## Developer notes:
 
-TODO: Implement shape
+DONE: Implement shape (experimental)
+
+In order to use shape objects you need to call ```purgeWithShape(data, shape)``` from your server-side
+code when returning data to client. If the function gets an undefined shape object it will return
+the passed data AS IS. Note that the shape object passed here is a nested shape object.
+
+To provide a more developer friendly syntax for shape objects you call ```createNestedShape(flatShape)``` which
+will convert a flat list of expressions to a nested shape object you can pass to ```purgeWithShape()```.
+
+You should always use the flat shape object syntax in clients for readability. Examples of the developer friendly flat shape object syntax can be seen here:
+
 ```js
 shape = [
   "discountCode",
@@ -203,10 +213,10 @@ shape = [
   "order",
   "order.orderDate",
   "order.orderCurrency",
-  "order.orderRows[]",
-  "order.orderRows[].itemDescription",
-  "order.orderRows[].sku",
-  "order.orderRows[].qty",
+  "order.orderRows",
+  "order.orderRows.itemDescription",
+  "order.orderRows.sku",
+  "order.orderRows.qty",
 ]
 
 // All primitive props on first lever except email (skipping objects and arrays)
@@ -235,19 +245,28 @@ shape = [
 shape = [
   "*",
   "order.*.*",
-  "order.!orderRows[]",
+  "order.!orderRows",
 ]
 
 // All primitive props at first level and all props for order, limiting results in array orderRows
+// TODO: Implement limiting for arrays
 shape = [
   "*",
   "order.*.*",
   "order.orderRows[0-9]",
 ]
+```
 
+TODO: Create flat shape objects from an isomorphic-schema.
+
+```js
 // Create shape from provided schema (useful when getting data for forms etc.)
 createShapeFromSchema(schema)
+```
 
+Examples of nested shape objects:
+
+```js
 // Server-side filter of output is performed by Restish
 // Objects do a lookahead to next level to see if they should be included at all
 purgeWithShape(data, shape)
@@ -273,13 +292,13 @@ purgeWithShape(data, shape)
 ]
 [
   ["*"],
-  ["order.*", "order.!orderRows[]"],
+  ["order.*", "order.!orderRows"],
   ["order.*.*"],
 ]
+// Array options hasn't been implemented yest
 [
   ["*"],
   ["order.*", "order.orderRows[0-9]"],
   ["order.*.*"],
 ]
-
 ```
