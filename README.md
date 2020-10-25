@@ -12,6 +12,18 @@ The client-side library abstracts data fetching and handles endpoint caching. Th
 
 Because RESTish uses the mental model of a REST API, it is easy to learn and lowers the cost of migration by several orders of magnitude. This lightweight approach is a perfect candidate to run on a serverless platform, integrating your micro-services.
 
+## express-restish
+If you use Express.js there is a RESTish router available in `express-restish.js`. The code looks identical to that of KoaJS below but with slightly differen syntax to hook up the RESTish router. You can look at the tests in `__test__/serverExpress.js`.
+
+```js
+import RestishRouter from 'koa-restish/lib/express-restish'
+/*
+  Mostly same as for KoaJS
+*/
+router.post('/restish', express.json(), restish.routes());
+router.get('/restish', (req, res, next) => res.send('ok'));
+```
+
 ## Server-side code example using KoaJS
 
 index.mjs

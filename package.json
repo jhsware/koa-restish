@@ -28,6 +28,7 @@
     "@babel/preset-env": "^7.1.0",
     "@babel/register": "^7.0.0",
     "chai": "^4.1.2",
+    "express": "^4.17.1",
     "koa": "^2.6.1",
     "koa-json-body": "^5.3.0",
     "koa-logger": "^3.2.0",
@@ -45,6 +46,7 @@
     "build": "rm -rf ./dist* && NODE_ENV=production npm run build:client && NODE_ENV=production npm run build:server",
     "build-dev": "rm -rf ./dist && babel lib --out-dir dist --source-maps --watch",
     "test": "NODE_ENV=test node_modules/mocha/bin/mocha --require @babel/register --exit ./__test__/test-*.js",
+    "testOne": "NODE_ENV=test node_modules/mocha/bin/mocha --require @babel/register --exit ./__test__/test-queryW*.js",
     "prepublish": "NODE_ENV=development npm run build && NODE_ENV=test npm run test",
     "postversion": "git push && git push --tags"
   }
