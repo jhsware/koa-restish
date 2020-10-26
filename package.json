@@ -1,6 +1,6 @@
 {
   "name": "koa-restish",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "A REST inspired data access layer for single page apps",
   "author": {
     "name": "Sebastian Ware",
