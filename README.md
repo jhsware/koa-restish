@@ -228,6 +228,33 @@ app.use(async (ctx) => {
 })
 ```
 
+## Recommended folder structure
+
+```js
+index.js      // reads .env file and calls app.listen
+server.js     // configure your routes, CORS, session handling
+endpoints/    // callbacks for OAuth2 etc.
+apis/         // contains all your RESTish integrations with external APIs
+  serviceX.js // probaly mounted as '/api/serviceX'
+  serviceY.js // probaly mounted as '/api/serviceY'
+types/        // contains all your RESTish data manipulation endpoints organised by path
+  content.js  // content object CRUD  '/content/:type/...'
+  user.js     // user CRUD '/user/...'
+  session.js  // CRUD for session handling '/session/...'
+__tests__/    // tests for RESTish handlers etc.
+```
+
+## Writing tests
+To call a RESTish handler in your tests you use the following signature:
+```js
+const URI = '/path/to/endpoint'
+const query = {} // Normally passed by client (optional)
+const params = {} // Normally determined by RESTish router (optional)
+const data = {} // only for write operations (optional)
+const ctx = { request, response, session } // Only needed if you access them
+handler({ URI, query, shape, params, data, ctx })
+```
+
 ## Developer notes:
 
 DONE: Implement shape (experimental)
