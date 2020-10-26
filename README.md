@@ -15,11 +15,11 @@ Because RESTish uses the mental model of a REST API, it is easy to learn and low
 ## A RESTish endpoint handler
 The RESTish endpoint handler is passed six named parameters. It is up to the developer to implement all the code in these handlers. This gives maximum flexibility.
 
-**URI** - the RESTish URI used to access the endpoint (as passed from the client)
-**query** - query params passed from the client (unedifined in most cases not involving queries)
-**shape** - a flat shape object consisting of a list of expressions defining what output data we want (note, it is up to the developer to fulfill this, there are helper methods in `purgeWithShape.js` to help you but they are currently experimental, check the tests and docs at the end of this README)
-**params** - params of the URIas defined in the RESTish endpoint paths `/content/:type` provides the type param
-**ctx** - contains the `request` and `response` object, also the `session` object if available.
+- **URI** - the RESTish URI used to access the endpoint (as passed from the client)
+- **query** - query params passed from the client (unedifined in most cases not involving queries)
+- **shape** - a flat shape object consisting of a list of expressions defining what output data we want (note, it is up to the developer to fulfill this, there are helper methods in `purgeWithShape.js` to help you but they are currently experimental, check the tests and docs at the end of this README)
+- **params** - params of the URIas defined in the RESTish endpoint paths `/content/:type` provides the type param
+- **ctx** - contains the `request` and `response` object, also the `session` object if available.
 
 Note that both koa-restish and express-restish handles sending your data to the client. All you need to do is return your result.
 
