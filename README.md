@@ -365,3 +365,7 @@ purgeWithShape(data, shape)
   ["order.*.*"],
 ]
 ```
+
+TODO: Did this break matching of routes when layered?
+  "Removed unused options in matchPath, and specifying strict using exact	2e8c9bc	jhsware"
+  "/admin/:type" without "exact" prop should match "/admin/User/5f84669489e28231b5119220"
