@@ -38,6 +38,7 @@
     "safe-utils": "^0.2.1"
   },
   "dependencies": {
+    "axios": "^0.18.0",
     "path-to-regexp-es6": "^1.7.0"
   },
   "scripts": {
