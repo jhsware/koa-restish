@@ -46,7 +46,7 @@
     "build-dev": "rm -rf ./dist && babel lib --out-dir dist --source-maps --watch",
     "test": "NODE_ENV=test node_modules/mocha/bin/mocha --require @babel/register --exit ./__test__/test-*.js",
     "testOne": "NODE_ENV=test node_modules/mocha/bin/mocha --require @babel/register --exit ./__test__/test-queryW*.js",
-    "prepublish": "NODE_ENV=development npm run build && NODE_ENV=test npm run test",
+    "prepare": "NODE_ENV=development npm run build && NODE_ENV=test npm run test",
     "postversion": "git push && git push --tags"
   }
 }
