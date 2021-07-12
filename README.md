@@ -12,13 +12,19 @@ The client-side library abstracts data fetching and handles endpoint caching. Th
 
 Because RESTish uses the mental model of a REST API, it is easy to learn and lowers the cost of migration by several orders of magnitude. This lightweight approach is a perfect candidate to run on a serverless platform, integrating your micro-services.
 
+## Changelog
+v0.4 deprecates properties `data` and `status` returned in the client response object  (will be removed in 1.0 release).
+Use `result` instead, it includes both body and status for each action. To set status codes, throw the custom errors available in `koa-restish/lib/errors`. See ___test___/server.js and ___test___/serverExpress.js for examples.
+
+NOTE: Version 0.3 client is incompatible with 0.4 server code and vice versa. Make sure you use the same version on both client and server. After 1.0 release, we will maintain backward compatibility.
+
 ## A RESTish endpoint handler
 The RESTish endpoint handler is passed six named parameters. It is up to the developer to implement all the code in these handlers. This gives maximum flexibility.
 
 - **URI** {string} - the RESTish URI used to access the endpoint (as passed from the client)
 - **query** {object} - query params passed from the client (unedifined in most cases not involving queries)
 - **sortBy** {object} - select sort order
-- **shape** {object} - a flat shape object consisting of a list of expressions defining what output data we want (note, it is up to the developer to fulfill this, there are helper methods in `purgeWithShape.js` to help you but they are currently experimental, check the tests and docs at the end of this README)
+- **shape** {object} - a flat shape object consisting of a list of expressions defining what output data we want (note, it is up to the developer to implement this, there are helper methods in `purgeWithShape.js` to help you but they are currently experimental, check the tests and docs at the end of this README)
 - **params** {object} - params of the URIas defined in the RESTish endpoint paths `/content/:type` provides the type param
 - **ctx** {object} - contains the `request` and `response` object, also the `session` object if available.
 
@@ -167,9 +173,12 @@ const API_URI = 'http://localhost:3000/restish'
 const apiClient = new ApiClient({ API_URI })
 
 // Fetch current user
-const { data } = await apiClient.query({
+const { result } = await apiClient.query({
   URI: '/session'
 })
+const { body, status } = result
+// status is the equivalent of HTTP status codes
+// 200 - OK
 
 // Fetch data from multiple endpoints in a single call
 const query = {
@@ -177,20 +186,23 @@ const query = {
     section: 'investor'
   }
 }
-const { data } = await apiClient.query([
+const { result } = await apiClient.query([
   { URI: `/content/app/${appId}` }
   { URI: '/content/page', query }
 ])
-const app = data[0]
-const pages = data[1]
+const { body: app, status: statusApp } = result[0]
+const { body: pages, status: statusPages = result[1]
 
 // Create an object
-const { data } = await apiClient.create({
+const { result } = await apiClient.create({
   URI: '/content/page',
   data: { ... },
   // Invalidates all cached endpoints that start with /content/page
   invalidate: ['/content/page']
 })
+const { body, status } = result
+// status is the equivalent of HTTP status codes
+// 201 - Created
 ```
 
 ## Server-side rendering
@@ -364,6 +376,37 @@ purgeWithShape(data, shape)
   ["order.*", "order.orderRows[0-9]"],
   ["order.*.*"],
 ]
+```
+
+## VS Code
+
+This is a launch.json snippet to run tests for debugging. Note setting the env var (see babel.config.js):
+
+```json
+    {
+      "env": {
+        "TARGET": "server"
+      },
+      "args": [
+        "--require",
+        "@babel/register",
+        "-u",
+        "tdd",
+        "--timeout",
+        "999999",
+        "--colors",
+        "${file}"
+      ],
+      "internalConsoleOptions": "openOnSessionStart",
+      "name": "Run Mocha Test File",
+      "program": "${workspaceFolder}/node_modules/mocha/bin/_mocha",
+      "request": "launch",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "sourceMaps": true,
+      "type": "pwa-node"
+    },
 ```
 
 TODO: Did this break matching of routes when layered?

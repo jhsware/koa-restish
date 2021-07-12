@@ -5,6 +5,7 @@ import koaRouter from 'koa-router'
 import RestishRouter from '../lib/koa-restish'
 // import RestishRouter from 'koa-restish/lib/koa-restish'
 import koaJSONBody from 'koa-json-body'
+import { NotFound } from '../lib/errors'
 
 const app = new koa();
 const router = new koaRouter();
@@ -33,6 +34,14 @@ restish.create('/content/:type', async ({ URI, query, shape, params, data }) => 
 })
 
 restish.query('/content/:type/:id?', async ({ URI, query, shape, params }) => {
+  if (params.type === 'NoneExisting' || params.type === 'AnotherNoneExisting') {
+    throw new NotFound()
+  }
+
+  if (params.type === 'ServerError')  {
+    throw new Error('Random error')
+  }
+
   if (params.id) {
     return Promise.resolve({
       _type: params.type,

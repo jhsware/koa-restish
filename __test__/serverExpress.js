@@ -3,6 +3,7 @@ import RestishRouter from '../lib/express-restish'
 
 const app = express();
 const router = express.Router();
+import { NotFound } from '../lib/errors'
 
 app.use(function (req, res, next) {
   // console.log('%s %s %s', req.method, req.url, req.path)
@@ -21,6 +22,15 @@ restish.create('/content/:type', async ({ URI, query, shape, params, data }) => 
 })
 
 restish.query('/content/:type/:id?', async ({ URI, query, shape, params }) => {
+
+  if (params.type === 'NoneExisting' || params.type === 'AnotherNoneExisting') {
+    throw new NotFound()
+  }
+
+  if (params.type === 'ServerError')  {
+    throw new Error('Random error')
+  }
+
   if (params.id) {
     return Promise.resolve({
       _type: params.type,
