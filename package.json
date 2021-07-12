@@ -40,8 +40,8 @@
     "path-to-regexp-es6": "^1.7.0"
   },
   "scripts": {
-    "build:client": "TARGET=client babel lib/matchPath.js lib/restish-client.js --out-dir dist  --source-maps",
-    "build:server": "TARGET=server babel lib/matchPath.js lib/koa-restish.js --out-dir distServer  --source-maps",
+    "build:client": "TARGET=client babel lib/errors.js lib/matchPath.js lib/restish-client.js --out-dir dist  --source-maps",
+    "build:server": "TARGET=server babel lib/errors.js lib/matchPath.js lib/koa-restish.js --out-dir distServer  --source-maps",
     "build": "rm -rf ./dist* && NODE_ENV=production npm run build:client && NODE_ENV=production npm run build:server",
     "build-dev": "rm -rf ./dist && babel lib --out-dir dist --source-maps --watch",
     "test": "NODE_ENV=test node_modules/mocha/bin/mocha --require @babel/register --exit ./__test__/test-*.js",
