@@ -27,7 +27,15 @@ const compilePath = (pattern, options) => {
 /**
  * Public API for matching a URL pathname to a path pattern.
  */
-export function matchPath(pathname, options) {
+type TMatch = {
+  isExact: boolean;
+  params: any;
+  path: any;
+  url: any;
+  handler?: Function;
+}
+
+export function matchPath(pathname, options): TMatch {
   if (typeof options === 'string') {
     options = { path: options };
   }

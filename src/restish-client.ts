@@ -7,7 +7,14 @@ function assert  (assertion, msg) {
   }
 }
 
-class Client {
+export default class Client {
+  API_URI: string;
+  axios: typeof axios;
+  queryCache: Record<string, any>;
+  objectCache: Record<string, any>;
+  setCookie: any;
+
+
   constructor(props) {
     this.API_URI = props.API_URI
     this.axios = props.axios || axios
@@ -17,7 +24,7 @@ class Client {
   }
 
   _checkCookie (res) {
-    if (typeof window !== 'undefined') return
+    if (typeof global !== 'undefined') return
 
     if (Array.isArray(res.headers['set-cookie'])) {
       this.setCookie = res.headers['set-cookie'][0]
@@ -120,7 +127,7 @@ class Client {
           return prev || matchPath(curr, {
             path: key,
             exact: true
-          }, undefined)
+          })
         }
       )
     })
@@ -142,7 +149,7 @@ class Client {
     const outp = inp.map(({ URI, query, sortBy, shape, cache = true}) => {
       let queryCacheKey
       if (query) {
-        assert(typeof query === 'object')
+        assert(typeof query === 'object', 'Query is not an object')
         queryCacheKey = this._toCacheKey({ query, sortBy, shape })
       }
       
@@ -261,5 +268,3 @@ class Client {
     return this._mutation('delete', opts)
   }
 }
-
-export default Client

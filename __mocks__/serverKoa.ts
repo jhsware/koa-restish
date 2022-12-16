@@ -2,10 +2,10 @@ import koa from 'koa'
 import logger from 'koa-logger'
 import session from 'koa-session'
 import koaRouter from 'koa-router'
-import RestishRouter from '../lib/koa-restish'
+import RestishRouter from '../src/koa-restish'
 // import RestishRouter from 'koa-restish/lib/koa-restish'
 import koaJSONBody from 'koa-json-body'
-import { NotFound } from '../lib/errors'
+import { NotFound } from '../src/errors'
 
 const app = new koa();
 const router = new koaRouter();

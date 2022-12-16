@@ -1,6 +1,5 @@
-require("@babel/polyfill")
-const { expect } = require('chai')
-const { purgeWithShape } = require('../lib/purgeWithShape')
+import { describe, expect, it } from "@jest/globals";
+import { purgeWithShape } from '../src/purgeWithShape';
 
 describe("purge data using shapes", () => {
 
@@ -9,7 +8,7 @@ describe("purge data using shapes", () => {
     it("Returns all data", async function () {
       const tmp = purgeWithShape(testData, undefined)
 
-      expect(JSON.stringify(tmp)).to.equal(JSON.stringify(testData))
+      expect(JSON.stringify(tmp)).toEqual(JSON.stringify(testData))
     })
 
     it("Returns all data", async function () {
@@ -20,7 +19,7 @@ describe("purge data using shapes", () => {
       ]
       const tmp = purgeWithShape(testData, shape)
 
-      expect(JSON.stringify(tmp)).to.equal(JSON.stringify(testData))
+      expect(JSON.stringify(tmp)).toEqual(JSON.stringify(testData))
     })
 
     it("Only return first level primitive types", async function () {
@@ -32,7 +31,7 @@ describe("purge data using shapes", () => {
       ]
       const tmp = purgeWithShape(testData, shape)
 
-      expect(JSON.stringify(tmp)).to.equal(JSON.stringify(target))
+      expect(JSON.stringify(tmp)).toEqual(JSON.stringify(target))
     })
 
     it("Return first level and second level primitive types", async function () {
@@ -52,7 +51,7 @@ describe("purge data using shapes", () => {
       ]
       const tmp = purgeWithShape(testData, shape)
 
-      expect(JSON.stringify(tmp)).to.equal(JSON.stringify(target))
+      expect(JSON.stringify(tmp)).toEqual(JSON.stringify(target))
     })
 
     it("Return all first level, except metaData, and second level primitive types", async function () {
@@ -69,7 +68,7 @@ describe("purge data using shapes", () => {
       ]
       const tmp = purgeWithShape(testData, shape)
 
-      expect(JSON.stringify(tmp)).to.equal(JSON.stringify(target))
+      expect(JSON.stringify(tmp)).toEqual(JSON.stringify(target))
     })
 
     it("Return all first to third level except metaData.scores", async function () {
@@ -91,7 +90,7 @@ describe("purge data using shapes", () => {
       ]
       const tmp = purgeWithShape(testData, shape)
 
-      expect(JSON.stringify(tmp)).to.equal(JSON.stringify(target))
+      expect(JSON.stringify(tmp)).toEqual(JSON.stringify(target))
     })
   })
 

@@ -3,7 +3,7 @@
  * @param {Object} data input data
  * @param {Object} shape= a nested shape object that defines what output should look like
  */
-function purgeWithShape (data, shape) {
+export function purgeWithShape (data, shape) {
   // Make sure we have a super fast path with nothing needs to be done
   if (shape === undefined || typeof data !== 'object' || data === null) {
     return data
@@ -72,7 +72,8 @@ function purgeWithShape (data, shape) {
  * @param {(String|String[])} flatShape
  * @returns Object
  */
-function createNestedShape(flatShape) {
+type TFlatShape = string | string[]
+export function createNestedShape(flatShape: TFlatShape = undefined) {
   // Make sure we have a super fast path with nothing needs to be done
   if (flatShape === undefined) {
     return undefined
@@ -108,7 +109,3 @@ function createNestedShape(flatShape) {
   return outp
 }
 
-module.exports = {
-  purgeWithShape,
-  createNestedShape
-}

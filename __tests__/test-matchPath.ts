@@ -1,7 +1,5 @@
-import "@babel/polyfill"
-import { matchPath } from '../lib/matchPath'
-// import Client from 'koa-restish/lib/restish-client'
-import { expect } from 'chai'
+import { describe, expect, it } from "@jest/globals";
+import { matchPath } from '../src/matchPath'
 
 describe("matchPath", () => {
   it("matches exact", async function () {
@@ -9,8 +7,8 @@ describe("matchPath", () => {
       path: '/admin/:type/:id'
     }
     const match = matchPath('/admin/User/5f84669489e28231b5119220', pathExp)
-    expect(match).to.not.equal(undefined)
-    expect(match.isExact).to.equal(true)
+    expect(match).not.toEqual(undefined)
+    expect(match.isExact).toEqual(true)
   })
 
   it("matches partial", async function () {
@@ -19,8 +17,8 @@ describe("matchPath", () => {
       exact: false
     }
     const match = matchPath('/admin/User/5f84669489e28231b5119220', pathExp)
-    expect(match).to.not.equal(undefined)
-    expect(match.isExact).to.equal(false)
+    expect(match).not.toEqual(undefined)
+    expect(match.isExact).toEqual(false)
   })
 
   it("no match when missing", async function () {
@@ -29,6 +27,6 @@ describe("matchPath", () => {
       exact: false
     }
     const match = matchPath('/admin/User', pathExp)
-    expect(match).null
+    expect(match).toEqual(null);
   })
 })

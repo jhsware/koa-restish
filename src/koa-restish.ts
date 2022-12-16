@@ -1,6 +1,7 @@
 // import { safeGet } from 'safe-utils'
 import { matchPath } from './matchPath'
 import { RestishServerError, InternalServerError } from './errors'
+import type { THandlers } from './types'
 
 const IS_DEVELOPMENT = (process.env.NODE_ENV && process.env.NODE_ENV.toLowerCase()) === 'development'
 
@@ -13,7 +14,7 @@ function _genStatusCode (method) {
   }
 }
 
-function _genResultFromError(e) {
+function _genResultFromError(e: any) {
   if (e instanceof RestishServerError) {
     return { body: undefined, status:  e.code }
   }
@@ -24,6 +25,7 @@ function _genResultFromError(e) {
 }
 
 class Router {
+  _handlers: THandlers;
 
   constructor () {
     this._handlers = {
@@ -63,14 +65,11 @@ class Router {
   }
 
   routes () {
-    return async (request, response, next) => {
+    return async (ctx, next) => {
       // console.log('******** YOU GOT ME! *********')
       const outp = {}
 
-      // console.log(request.body)
-
-      const promises = request.body.actions.map(({ URI, method, query, shape, data, cacheKey}) => {
-        // console.log(">>>> action: " + URI)
+      const promises = ctx.request.body.actions.map(({ URI, method, query, shape, data, cacheKey}) => {
         
         const { handler, params } = this._handlers[method].reduce((prev, curr) => {
           if (prev !== undefined) {
@@ -95,16 +94,10 @@ class Router {
         }
         */
 
-        // console.log(">>>> calling handler: " + URI)
-        const ctx = {
-          request, response
-        }
-        if (request.hasOwnProperty('session')) {
-          ctx['session'] = request.session
-        }
 
-        try  {
+        try {
           const result = handler({ URI, query, shape, params, data, ctx })
+
           if (result && result.then) {
             return result
               .then((res) => {
@@ -130,15 +123,15 @@ class Router {
           outp[cacheKey] = _genResultFromError(e)
           return Promise.resolve()
         }
-        
       })
-      // console.log("running Promise.all")
-
-      Promise.all(promises).then(() => {
-        IS_DEVELOPMENT && console.log(`[koa-restish] Actions resolved:`)
-        response.json(outp)
-        IS_DEVELOPMENT && console.log(JSON.stringify(outp))
-      }).catch(next)
+      
+      // In case we have stuff going on downstream...
+      await next()
+    
+      await Promise.all(promises)
+      IS_DEVELOPMENT && console.log(`[koa-restish] Actions resolved:`)
+      ctx.body = outp
+      IS_DEVELOPMENT && console.log(JSON.stringify(outp))
     }
   }
 }

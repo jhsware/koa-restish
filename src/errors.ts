@@ -1,5 +1,8 @@
 
 export class RestishServerError extends Error  {
+  name: string;
+  code: number;
+  
   constructor(message, name, code) {
     super(message);
     this.name = name;

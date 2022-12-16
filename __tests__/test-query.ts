@@ -1,24 +1,22 @@
-import "@babel/polyfill"
-import koaServer from './server'
-import Client from '../lib/restish-client'
-// import Client from 'koa-restish/lib/restish-client'
-import { expect } from 'chai'
+import { describe, expect, it, beforeAll, afterAll } from "@jest/globals";
+import koaServer from '../__mocks__/serverKoa'
+import Client from '../src/restish-client'
 
-const PORT = 3901
+const PORT = 3903
 const SERVER_ENDPOINT = `http://localhost:${PORT}/restish`
 
 describe("restish-client query (koa)", () => {
 
   let server;
 
-  before((done) => {
+  beforeAll((done) => {
     server = koaServer.listen(PORT, () => {
       console.log('The test server is started at ' + PORT)
       done()
     })
   })
 
-  after(() => {
+  afterAll(() => {
     server.close()
   })
 
@@ -30,8 +28,8 @@ describe("restish-client query (koa)", () => {
         URI: '/content/Post'
       })
       
-      expect(Array.isArray(data)).to.equal(true)
-      expect(data[0]._type).to.equal('Post')
+      expect(Array.isArray(data)).toEqual(true)
+      expect(data[0]._type).toEqual('Post')
     })
 
     it("batched with array (legacy)", async function () {
@@ -42,9 +40,9 @@ describe("restish-client query (koa)", () => {
         { URI: '/content/Comment/1' },
         { URI: '/content/Photo/1' }
       ])
-      expect(data[0]._type).to.equal('Post')
-      expect(data[1]._type).to.equal('Comment')
-      expect(data[2]._type).to.equal('Photo')
+      expect(data[0]._type).toEqual('Post')
+      expect(data[1]._type).toEqual('Comment')
+      expect(data[2]._type).toEqual('Photo')
     })
 
     it("cached (legacy)", async function () {
@@ -58,8 +56,8 @@ describe("restish-client query (koa)", () => {
       const {data} = await backend.query({
         URI: '/content/Cached/1'
       })
-      expect(data._id).to.equal(origData._id)
-      expect(data.timestamp).to.equal(origData.timestamp)
+      expect(data._id).toEqual(origData._id)
+      expect(data.timestamp).toEqual(origData.timestamp)
     })
   })
 
@@ -76,9 +74,9 @@ describe("restish-client query (koa)", () => {
         data
       })
 
-      expect(createdData._type).to.equal('Post')
-      expect(createdData._id).not.to.equal(undefined)
-      expect(createdData.testString).to.equal('create')
+      expect(createdData._type).toEqual('Post')
+      expect(createdData._id).not.toEqual(undefined)
+      expect(createdData.testString).toEqual('create')
     })
 
     it("sent for multiple endpoints (legacy)", async function () {
@@ -92,10 +90,10 @@ describe("restish-client query (koa)", () => {
         { URI: '/content/Post', data },
         { URI: '/content/User', data }
       ])
-      expect(Array.isArray(createdData)).to.equal(true)
-      expect(createdData[0]._type).to.equal('Post')
-      expect(createdData[1]._type).to.equal('User')
-      expect(createdData[0].testString).to.equal('create')
+      expect(Array.isArray(createdData)).toEqual(true)
+      expect(createdData[0]._type).toEqual('Post')
+      expect(createdData[1]._type).toEqual('User')
+      expect(createdData[0].testString).toEqual('create')
     })
   })
 
@@ -118,8 +116,8 @@ describe("restish-client query (koa)", () => {
         URI: '/content/Cached/1'
       })
 
-      expect(data._id).to.equal(origData._id)
-      expect(data.timestamp).not.to.equal(origData.timestamp)
+      expect(data._id).toEqual(origData._id)
+      expect(data.timestamp).not.toEqual(origData.timestamp)
     })
 
     it("invalidated by multiple endpoints (legacy)", async function () {
@@ -152,10 +150,10 @@ describe("restish-client query (koa)", () => {
       const post = data[0]
       const user = data[1]
 
-      expect(post._id).to.equal(origPost._id)
-      expect(user._id).to.equal(origUser._id)
-      expect(post.timestamp).not.to.equal(origPost.timestamp)
-      expect(user.timestamp).not.to.equal(origUser.timestamp)
+      expect(post._id).toEqual(origPost._id)
+      expect(user._id).toEqual(origUser._id)
+      expect(post.timestamp).not.toEqual(origPost.timestamp)
+      expect(user.timestamp).not.toEqual(origUser.timestamp)
     })
   })
 
@@ -168,9 +166,9 @@ describe("restish-client query (koa)", () => {
       })
 
       const { result } = res
-      expect(Array.isArray(result.body)).to.equal(true)
-      expect(result.body[0]._type).to.equal('Post')
-      expect(result.status).to.equal(200)
+      expect(Array.isArray(result.body)).toEqual(true)
+      expect(result.body[0]._type).toEqual('Post')
+      expect(result.status).toEqual(200)
     })
 
     it("batched with array", async function () {
@@ -181,13 +179,13 @@ describe("restish-client query (koa)", () => {
         { URI: '/content/Comment/1' },
         { URI: '/content/Photo/1' }
       ])
-      expect(Array.isArray(result)).to.equal(true)
-      expect(result[0].status).to.equal(200)
-      expect(result[1].status).to.equal(200)
-      expect(result[2].status).to.equal(200)
-      expect(result[0].body._type).to.equal('Post')
-      expect(result[1].body._type).to.equal('Comment')
-      expect(result[2].body._type).to.equal('Photo')
+      expect(Array.isArray(result)).toEqual(true)
+      expect(result[0].status).toEqual(200)
+      expect(result[1].status).toEqual(200)
+      expect(result[2].status).toEqual(200)
+      expect(result[0].body._type).toEqual('Post')
+      expect(result[1].body._type).toEqual('Comment')
+      expect(result[2].body._type).toEqual('Photo')
     })
 
     it("cached", async function () {
@@ -201,9 +199,9 @@ describe("restish-client query (koa)", () => {
       const {result} = await backend.query({
         URI: '/content/Cached/1'
       })
-      expect(result.status).to.equal(200)
-      expect(result.body._id).to.equal(origData._id)
-      expect(result.body.timestamp).to.equal(origData.timestamp)
+      expect(result.status).toEqual(200)
+      expect(result.body._id).toEqual(origData._id)
+      expect(result.body.timestamp).toEqual(origData.timestamp)
     })
   })
 
@@ -222,10 +220,10 @@ describe("restish-client query (koa)", () => {
 
       const { body, status } = result
 
-      expect(body._type).to.equal('Post')
-      expect(body._id).not.to.equal(undefined)
-      expect(body.testString).to.equal('create')
-      expect(status).to.equal(201)
+      expect(body._type).toEqual('Post')
+      expect(body._id).not.toEqual(undefined)
+      expect(body.testString).toEqual('create')
+      expect(status).toEqual(201)
     })
 
     it("sent for multiple endpoints", async function () {
@@ -239,12 +237,12 @@ describe("restish-client query (koa)", () => {
         { URI: '/content/Post', data },
         { URI: '/content/User', data }
       ])
-      expect(Array.isArray(result)).to.equal(true)
-      expect(result[0].body._type).to.equal('Post')
-      expect(result[0].status).to.equal(201)
-      expect(result[1].body._type).to.equal('User')
-      expect(result[1].status).to.equal(201)
-      expect(result[0].body.testString).to.equal('create')
+      expect(Array.isArray(result)).toEqual(true)
+      expect(result[0].body._type).toEqual('Post')
+      expect(result[0].status).toEqual(201)
+      expect(result[1].body._type).toEqual('User')
+      expect(result[1].status).toEqual(201)
+      expect(result[0].body.testString).toEqual('create')
     })
   })
 
@@ -267,8 +265,8 @@ describe("restish-client query (koa)", () => {
         URI: '/content/Cached/1'
       })
 
-      expect(result.body._id).to.equal(origData._id)
-      expect(result.body.timestamp).not.to.equal(origData.timestamp)
+      expect(result.body._id).toEqual(origData._id)
+      expect(result.body.timestamp).not.toEqual(origData.timestamp)
     })
 
     it("invalidated by multiple endpoints", async function () {
@@ -301,10 +299,10 @@ describe("restish-client query (koa)", () => {
       const post = result[0].body
       const user = result[1].body
 
-      expect(post._id).to.equal(origPost._id)
-      expect(user._id).to.equal(origUser._id)
-      expect(post.timestamp).not.to.equal(origPost.timestamp)
-      expect(user.timestamp).not.to.equal(origUser.timestamp)
+      expect(post._id).toEqual(origPost._id)
+      expect(user._id).toEqual(origUser._id)
+      expect(post.timestamp).not.toEqual(origPost.timestamp)
+      expect(user.timestamp).not.toEqual(origUser.timestamp)
     })
   })
 
@@ -315,8 +313,8 @@ describe("restish-client query (koa)", () => {
       const { result } = await backend.query({
         URI: '/content/Post'
       })
-      expect(Array.isArray(result.body)).to.equal(true)
-      expect(result.status).to.equal(200)
+      expect(Array.isArray(result.body)).toEqual(true)
+      expect(result.status).toEqual(200)
     })
 
     it("by single query (Not Found)", async function () {
@@ -325,8 +323,8 @@ describe("restish-client query (koa)", () => {
       const { result } = await backend.query({
         URI: '/content/NoneExisting'
       })
-      expect(result.body).to.equal(undefined)
-      expect(result.status).to.equal(404)
+      expect(result.body).toEqual(undefined)
+      expect(result.status).toEqual(404)
     })
     
     it("by single query (Internal Server Error)", async function () {
@@ -335,8 +333,8 @@ describe("restish-client query (koa)", () => {
       const { result } = await backend.query({
         URI: '/content/ServerError'
       })
-      expect(result.body).to.equal(undefined)
-      expect(result.status).to.equal(500)
+      expect(result.body).toEqual(undefined)
+      expect(result.status).toEqual(500)
     })
 
     it("by batched query (Not Found)", async function () {
@@ -346,11 +344,11 @@ describe("restish-client query (koa)", () => {
         { URI: '/content/NoneExisting' },
         { URI: '/content/AnotherNoneExisting' },
       ])
-      expect(Array.isArray(result)).to.equal(true)
-      expect(result[0].status).to.equal(404)
-      expect(result[0].body).to.equal(undefined)
-      expect(result[1].status).to.equal(404)
-      expect(result[1].body).to.equal(undefined)
+      expect(Array.isArray(result)).toEqual(true)
+      expect(result[0].status).toEqual(404)
+      expect(result[0].body).toEqual(undefined)
+      expect(result[1].status).toEqual(404)
+      expect(result[1].body).toEqual(undefined)
     })
     it("by batched query (OK / Not Found)", async function () {
       const backend = new Client({ API_URI: SERVER_ENDPOINT })
@@ -359,11 +357,11 @@ describe("restish-client query (koa)", () => {
         { URI: '/content/Post' },
         { URI: '/content/NoneExisting' },
       ])
-      expect(Array.isArray(result)).to.equal(true)
-      expect(result[0].status).to.equal(200)
-      expect(Array.isArray(result[0].body)).to.equal(true)
-      expect(result[1].status).to.equal(404)
-      expect(result[1].body).to.equal(undefined)
+      expect(Array.isArray(result)).toEqual(true)
+      expect(result[0].status).toEqual(200)
+      expect(Array.isArray(result[0].body)).toEqual(true)
+      expect(result[1].status).toEqual(404)
+      expect(result[1].body).toEqual(undefined)
     })
   })
 })

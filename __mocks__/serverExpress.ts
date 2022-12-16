@@ -1,9 +1,9 @@
 import express, { response } from 'express'
-import RestishRouter from '../lib/express-restish'
+import RestishRouter from '../src/express-restish'
+import { NotFound } from '../src/errors'
 
 const app = express();
 const router = express.Router();
-import { NotFound } from '../lib/errors'
 
 app.use(function (req, res, next) {
   // console.log('%s %s %s', req.method, req.url, req.path)
