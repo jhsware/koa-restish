@@ -1,16 +1,26 @@
 import koa from 'koa'
-import koaRouter from 'koa-router';
-import koaJSONBody from 'koa-json-body';
-import RestishRouter from '../src/express-restish'
+import logger from 'koa-logger'
+import session from 'koa-session'
+import koaRouter from 'koa-router'
+import RestishRouter from '../src/koa-restish'
+// import RestishRouter from 'koa-restish/lib/koa-restish'
+import koaJSONBody from 'koa-json-body'
 import { NotFound } from '../src/errors'
 
 const app = new koa();
-const router = new koaRouter()
+const router = new koaRouter();
 
-app.use(function (req, res, next) {
-  // console.log('%s %s %s', req.method, req.url, req.path)
-  next()
-})
+const SESSION_CONFIG = {
+  httpOnly: true,
+  maxAge: 86400000,
+  signed: false
+}
+
+app.use(logger((str, args) => {
+  // console.log(str)
+}))
+
+app.use(session(SESSION_CONFIG, app))
 
 const restish = new RestishRouter()
 
@@ -24,7 +34,6 @@ restish.create('/content/:type', async ({ URI, query, shape, params, data }) => 
 })
 
 restish.query('/content/:type/:id?', async ({ URI, query, shape, params }) => {
-
   if (params.type === 'NoneExisting' || params.type === 'AnotherNoneExisting') {
     throw new NotFound()
   }
@@ -70,9 +79,10 @@ restish.delete('/content/:type/:id', async ({ URI, query, shape, params }) => {
 })
 
 router.post('/restish', koaJSONBody(), restish.routes());
-router.get('/restish', (req, res, next) => res.send('ok'));
+router.get('/restish', (ctx) => ctx.body = 'ok');
 
-app.use(router)
+app.use(router.routes());
+app.use(router.allowedMethods());
 
 export default app
 /*

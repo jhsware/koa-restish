@@ -1,3 +1,8 @@
+TODO: Improve typing
+TODO: Improve error handling
+TODO: Check that shapes work
+TODO: Perform related lookups server side if instructed
+
 # koa-restish
 
 RESTish is the natural evolution of REST APIs, with the addition of batch calls and client-side endpoint level caching. This bridges some of the gap between GraphQL and REST but at 1/10th of the size.
