@@ -12,47 +12,50 @@
     "url": "git+https://github.com/jhsware/koa-restish.git"
   },
   "license": "MIT",
-  "source": "src/index.ts",
+  "main": "dist/restish-client.cjs.js",
   "browser": "dist/restish-client.cjs.js",
-  "module": "dist/index.module.js",
-  "types": "dist/types.d.ts",
+  "browserslist": "> 0.5%, not dead",
   "targets": {
     "browser": {
       "source": "src/restish-client.ts",
-      "browserslist": "> 0.5%, not dead"
+      "optimize": true
     },
     "koa": {
       "source": "src/koa-restish.ts",
+      "distDir": "distServer",
       "engines": {
-        "node": ">= 16"
-      }
+        "node": ">= 18.17"
+      },
+      "isLibrary": true
     },
     "express": {
       "source": "src/express-restish.ts",
+      "distDir": "distServer",
       "engines": {
-        "node": ">= 16"
-      }
+        "node": ">= 18.17"
+      },
+      "isLibrary": true
     }
   },
   "sideEffects": false,
   "devDependencies": {
-    "@parcel/packager-ts": "^2.8.1",
-    "@parcel/transformer-typescript-types": "^2.8.1",
+    "@parcel/packager-ts": "^2.10.3",
+    "@parcel/transformer-typescript-types": "^2.10.3",
     "@types/node": "^18.11.9",
     "express": "^4.17.1",
     "jest-environment-jsdom": "^29.1.2",
     "koa-json-body": "^5.3.0",
     "koa-logger": "^3.2.0",
     "koa-router": "^7.4.0",
-    "koa-session": "^5.8.1",
+    "koa-session": "^6.4.0",
     "koa": "^2.6.1",
     "parcel": "^2.8.0",
     "ts-jest": "^29.0.3",
-    "typescript": "^4.9.4"
+    "typescript": "^5.3.3"
   },
   "dependencies": {
-    "@swc/helpers": "^0.4.14",
-    "axios": "^0.21.1",
+    "@swc/helpers": "^0.5.3",
+    "axios": "^1.5.2",
     "path-to-regexp-es6": "^1.7.0"
   },
   "scripts": {
