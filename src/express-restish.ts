@@ -1,9 +1,8 @@
-// import { safeGet } from 'safe-utils'
 import { matchPath } from './matchPath'
 import { RestishServerError, InternalServerError } from './errors'
 import type { THandlers } from './types'
 
-const IS_DEVELOPMENT = (process.env.NODE_ENV && process.env.NODE_ENV.toLowerCase()) === 'development'
+const IS_DEVELOPMENT = process.env.NODE_ENV?.toLowerCase() === 'development'
 
 function _genStatusCode (method) {
   switch (method) {
