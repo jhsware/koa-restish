@@ -175,7 +175,10 @@ export default class Client {
 
       return {
         result: wasArray ? result : result[0],
-        data:  wasArray ? result.map((item) => item.body) : result[0].body // for compat
+        data:  wasArray ? result.map((item) => item.body) : result[0].body, // for compat
+        status: wasArray
+          ? 207 // Multi-status https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/207
+          : 304 // Not modified https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/304
       }
     }
 
@@ -204,7 +207,10 @@ export default class Client {
 
       return {
         result: wasArray ? result : result[0],
-        data:  wasArray ? result.map((item) => item.body) : result[0].body // for compat
+        data:  wasArray ? result.map((item) => item.body) : result[0].body, // for compat
+        status: wasArray
+          ? 207 // Multi-status https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/207
+          : res.status // Single result so return status 
       }
       // Note: I passed a status prop before but it was pretty useless som removed it
     })
@@ -252,7 +258,8 @@ export default class Client {
       })
       return {
         result: wasArray ? result : result[0],
-        data:  wasArray ? result.map((item) => item.body) : result[0].body // for compat
+        data:  wasArray ? result.map((item) => item.body) : result[0].body, // for compat
+        status: res.status
       }
     })
   }
