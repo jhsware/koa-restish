@@ -1,5 +1,6 @@
 import { matchPath } from './matchPath'
 import { RestishServerError, InternalServerError } from './errors'
+export * from './errors'
 import type { THandlers } from './types'
 
 const IS_DEVELOPMENT = process.env.NODE_ENV?.toLowerCase() === 'development'
@@ -15,10 +16,13 @@ function _genStatusCode (method) {
 
 function _genResultFromError(e: any) {
   if (e instanceof RestishServerError) {
-    return { body: undefined, status:  e.code }
+    if (e instanceof InternalServerError) {
+      console.error(e)
+    }
+    return { body: e.message, status:  e.code }
   }
   else {
-    console.log(e)
+    console.error(e)
     return { body: undefined, status:  500 }
   }
 }
